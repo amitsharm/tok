@@ -1,0 +1,4 @@
+
+Waiting for kubernetes to start
+complete
+complete
