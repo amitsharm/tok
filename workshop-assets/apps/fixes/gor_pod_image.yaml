@@ -1,0 +1,14 @@
+spec:
+  template:
+    spec:
+      containers:
+      - image: charlyyfon/dev:gor-0.0.1
+        imagePullPolicy: Always
+        name: traffic-gen
+        env:
+          - name: FRONTEND_SERVICE_HOST
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
+          - name: FRONTEND_SERVICE_PORT
+            value: "30001"

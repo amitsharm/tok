@@ -1,0 +1,14 @@
+  annotations:
+    ad.datadoghq.com/etcd.check_names: '["etcd"]'
+    ad.datadoghq.com/etcd.init_configs: '[{}]'
+    ad.datadoghq.com/etcd.instances: |
+      [
+        {
+          "prometheus_url": "https://%%host%%:2379/metrics",
+          "ssl_verify": "false",
+          "use_preview": "true",
+          "ssl_ca_cert": "/keys/ca.crt",
+          "ssl_cert": "/keys/peer.crt",
+          "ssl_private_key": "/keys/peer.key"
+        }
+      ]

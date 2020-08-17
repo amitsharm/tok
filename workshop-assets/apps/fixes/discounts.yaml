@@ -1,0 +1,6 @@
+spec:
+  template:
+    spec:
+      containers:
+      - image: ddtraining/discounts-service-fixed:latest
+        name: discounts

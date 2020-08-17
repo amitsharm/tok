@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: external
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: pod-lister
+  namespace: external
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: pod-lister
+rules: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: pod-lister
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: pod-lister
+subjects:
+- kind: ServiceAccount
+  name: pod-lister
+  namespace: external
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: gor
+  name: load-balancer-traffic
+  namespace: external
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: gor
+  template:
+    metadata:
+      labels:
+        run: gor
+    spec:
+      serviceAccountName: pod-lister
+      containers:
+      - image: charlyyfon/dev:gor-0.0.1
+        imagePullPolicy: Always
+        name: traffic-gen
+        command:
+          - "bin/fake_binary #testing, remove this section before pushing to prod"
+        env:
+          - name: FRONTEND_SERVICE_HOST
+            valueFrom:
+              fieldRef:
+                fieldPath: status.hostIP
+          - name: FRONTEND_SERVICE_PORT
+            value: "30001"
